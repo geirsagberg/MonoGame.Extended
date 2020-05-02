@@ -16,14 +16,14 @@ namespace MonoGame.Extended.Entities
         public EntityManager(ComponentManager componentManager)
         {
             _componentManager = componentManager;
-            _addedEntities = new Bag<int>(_defaultBagSize);
-            _removedEntities = new Bag<int>(_defaultBagSize);
-            _changedEntities = new Bag<int>(_defaultBagSize);
+            _addedEntities = new HashSet<int>();
+            _removedEntities = new HashSet<int>();
+            _changedEntities = new HashSet<int>();
             _entityToComponentBits = new Bag<BitVector32>(_defaultBagSize);
             _componentManager.ComponentsChanged += OnComponentsChanged;
 
             _entityBag = new Bag<Entity>(_defaultBagSize);
-            _entityPool = new Pool<Entity>(() => new Entity(_nextId++, this, _componentManager), _defaultBagSize);
+            _entityPool = new Pool<Entity>(() => new Entity(++_nextId, this, _componentManager), _defaultBagSize);
         }
 
         private readonly ComponentManager _componentManager;
@@ -35,9 +35,9 @@ namespace MonoGame.Extended.Entities
 
         private readonly Bag<Entity> _entityBag;
         private readonly Pool<Entity> _entityPool;
-        private readonly Bag<int> _addedEntities;
-        private readonly Bag<int> _removedEntities;
-        private readonly Bag<int> _changedEntities;
+        private readonly HashSet<int> _addedEntities;
+        private readonly HashSet<int> _removedEntities;
+        private readonly HashSet<int> _changedEntities;
         private readonly Bag<BitVector32> _entityToComponentBits;
 
         public event Action<int> EntityAdded;
@@ -57,8 +57,7 @@ namespace MonoGame.Extended.Entities
 
         public void Destroy(int entityId)
         {
-            if (!_removedEntities.Contains(entityId))
-                _removedEntities.Add(entityId);
+            _removedEntities.Add(entityId);
         }
 
         public void Destroy(Entity entity)
@@ -103,11 +102,13 @@ namespace MonoGame.Extended.Entities
                 EntityRemoved?.Invoke(entityId);
 
                 var entity = _entityBag[entityId];
-                _entityBag[entityId] = null;
-                _componentManager.Destroy(entityId);
-                _entityToComponentBits[entityId] = default(BitVector32);
-                ActiveCount--;
-                _entityPool.Free(entity);
+                if (entity != null) {
+                    _entityBag[entityId] = null;
+                    _componentManager.Destroy(entityId);
+                    _entityToComponentBits[entityId] = default(BitVector32);
+                    ActiveCount--;
+                    _entityPool.Free(entity);
+                }
             }
 
             _addedEntities.Clear();
