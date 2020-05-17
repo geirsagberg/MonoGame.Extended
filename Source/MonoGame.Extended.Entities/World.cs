@@ -6,13 +6,13 @@ namespace MonoGame.Extended.Entities
 {
     public class World : SimpleDrawableGameComponent
     {
-        private readonly Bag<IUpdateSystem> _updateSystems;
-        private readonly Bag<IDrawSystem> _drawSystems;
+        protected readonly Bag<IUpdateSystem> UpdateSystems;
+        protected readonly Bag<IDrawSystem> DrawSystems;
 
-        internal World()
+        protected internal World()
         {
-            _updateSystems = new Bag<IUpdateSystem>();
-            _drawSystems = new Bag<IDrawSystem>();
+            UpdateSystems = new Bag<IUpdateSystem>();
+            DrawSystems = new Bag<IDrawSystem>();
 
             RegisterSystem(ComponentManager = new ComponentManager());
             RegisterSystem(EntityManager = new EntityManager(ComponentManager));
@@ -20,15 +20,15 @@ namespace MonoGame.Extended.Entities
 
         public override void Dispose()
         {
-            foreach (var updateSystem in _updateSystems)
+            foreach (var updateSystem in UpdateSystems)
                 updateSystem.Dispose();
 
-            foreach (var drawSystem in _drawSystems)
+            foreach (var drawSystem in DrawSystems)
                 drawSystem.Dispose();
 
-            _updateSystems.Clear();
-            _drawSystems.Clear();
-            
+            UpdateSystems.Clear();
+            DrawSystems.Clear();
+
             base.Dispose();
         }
 
@@ -37,14 +37,14 @@ namespace MonoGame.Extended.Entities
 
         public int EntityCount => EntityManager.ActiveCount;
 
-        internal void RegisterSystem(ISystem system)
+        public void RegisterSystem(ISystem system)
         {
             // ReSharper disable once ConvertIfStatementToSwitchStatement
             if (system is IUpdateSystem updateSystem)
-                _updateSystems.Add(updateSystem);
+                UpdateSystems.Add(updateSystem);
 
             if (system is IDrawSystem drawSystem)
-                _drawSystems.Add(drawSystem);
+                DrawSystems.Add(drawSystem);
 
             system.Initialize(this);
         }
@@ -68,16 +68,16 @@ namespace MonoGame.Extended.Entities
         {
             EntityManager.Destroy(entity);
         }
-        
+
         public override void Update(GameTime gameTime)
         {
-            foreach (var system in _updateSystems)
+            foreach (var system in UpdateSystems)
                 system.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (var system in _drawSystems)
+            foreach (var system in DrawSystems)
                 system.Draw(gameTime);
         }
     }
