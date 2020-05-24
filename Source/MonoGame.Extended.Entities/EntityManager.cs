@@ -11,19 +11,14 @@ namespace MonoGame.Extended.Entities
 {
     public class EntityManager : UpdateSystem
     {
-        private const int _defaultBagSize = 128;
+        private const int DefaultBagSize = 128;
 
         public EntityManager(ComponentManager componentManager)
         {
             _componentManager = componentManager;
-            _addedEntities = new HashSet<int>();
-            _removedEntities = new HashSet<int>();
-            _changedEntities = new HashSet<int>();
-            _entityToComponentBits = new Bag<BitVector32>(_defaultBagSize);
             _componentManager.ComponentsChanged += OnComponentsChanged;
 
-            _entityBag = new Bag<Entity>(_defaultBagSize);
-            _entityPool = new Pool<Entity>(() => new Entity(++_nextId, this, _componentManager), _defaultBagSize);
+            _entityPool = new Pool<Entity>(() => new Entity(++_nextId, this, _componentManager), DefaultBagSize);
         }
 
         private readonly ComponentManager _componentManager;
@@ -33,12 +28,12 @@ namespace MonoGame.Extended.Entities
         public IEnumerable<int> Entities => _entityBag.Where(e => e != null).Select(e => e.Id);
         public int ActiveCount { get; private set; }
 
-        private readonly Bag<Entity> _entityBag;
+        private readonly Bag<Entity> _entityBag = new Bag<Entity>(DefaultBagSize);
         private readonly Pool<Entity> _entityPool;
-        private readonly HashSet<int> _addedEntities;
-        private readonly HashSet<int> _removedEntities;
-        private readonly HashSet<int> _changedEntities;
-        private readonly Bag<BitVector32> _entityToComponentBits;
+        private readonly HashSet<int> _addedEntities = new HashSet<int>();
+        private readonly HashSet<int> _removedEntities = new HashSet<int>();
+        private readonly HashSet<int> _changedEntities = new HashSet<int>();
+        private readonly Bag<BitVector32> _entityToComponentBits = new Bag<BitVector32>(DefaultBagSize);
 
         public event Action<int> EntityAdded;
         public event Action<int> EntityRemoved;

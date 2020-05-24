@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame.Extended.Input.InputListeners
 {
     /// <summary>
     ///     This is a class that contains settings to be used to initialise a <see cref="GamePadListener" />.
     /// </summary>
-    /// <seealso cref="InputListenerManager" />
     public class GamePadListenerSettings : InputListenerSettings<GamePadListener>
     {
         public GamePadListenerSettings()
@@ -38,10 +38,6 @@ namespace MonoGame.Extended.Input.InputListeners
             VibrationEnabled = vibrationEnabled;
             VibrationStrengthLeft = vibrationStrengthLeft;
             VibrationStrengthRight = vibrationStrengthRight;
-            TriggerDownTreshold = 0.15f;
-            ThumbstickDownTreshold = 0.5f;
-            RepeatInitialDelay = 500;
-            RepeatDelay = 50;
         }
 
         /// <summary>
@@ -53,14 +49,14 @@ namespace MonoGame.Extended.Input.InputListeners
         ///     When a button is held down, the interval in which
         ///     ButtonRepeated fires. Value in milliseconds.
         /// </summary>
-        public int RepeatDelay { get; set; }
+        public int RepeatDelay { get; set; } = 50;
 
         /// <summary>
         ///     The amount of time a button has to be held down
         ///     in order to fire ButtonRepeated the first time.
         ///     Value in milliseconds.
         /// </summary>
-        public int RepeatInitialDelay { get; set; }
+        public int RepeatInitialDelay { get; set; } = 500;
 
 
         /// <summary>
@@ -118,13 +114,23 @@ namespace MonoGame.Extended.Input.InputListeners
         ///     How deep the triggers have to be depressed in order to
         ///     register as a ButtonDown event.
         /// </summary>
-        public float TriggerDownTreshold { get; set; }
+        public float TriggerDownTreshold { get; set; } = 0.15f;
 
         /// <summary>
         ///     How deep the triggers have to be depressed in order to
         ///     register as a ButtonDown event.
         /// </summary>
-        public float ThumbstickDownTreshold { get; private set; }
+        public float ThumbstickDownTreshold { get; private set; } = 0.5f;
+
+        /// <summary>
+        ///     GamePadDeadZone mode to check for the left stick. Default is <see cref="GamePadDeadZone.IndependentAxes"/>
+        /// </summary>
+        public GamePadDeadZone DeadZoneModeLeft { get; set; } = GamePadDeadZone.IndependentAxes;
+
+        /// <summary>
+        ///     GamePadDeadZone mode to check for the right stick. Default is <see cref="GamePadDeadZone.IndependentAxes"/>
+        /// </summary>
+        public GamePadDeadZone DeadZoneModeRight { get; set; } = GamePadDeadZone.IndependentAxes;
 
         public override GamePadListener CreateListener()
         {

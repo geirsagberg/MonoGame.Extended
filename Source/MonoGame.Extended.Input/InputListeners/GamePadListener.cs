@@ -69,6 +69,8 @@ namespace MonoGame.Extended.Input.InputListeners
             TriggerDownTreshold = settings.TriggerDownTreshold;
             RepeatInitialDelay = settings.RepeatInitialDelay;
             RepeatDelay = settings.RepeatDelay;
+            DeadZoneModeLeft = settings.DeadZoneModeLeft;
+            DeadZoneModeRight = settings.DeadZoneModeRight;
 
             _previousGameTime = new GameTime();
             _previousState = GamePadState.Default;
@@ -174,6 +176,17 @@ namespace MonoGame.Extended.Input.InputListeners
         ///     register as a ButtonDown event.
         /// </summary>
         public float ThumbstickDownTreshold { get; }
+
+
+        /// <summary>
+        ///     GamePadDeadZone mode to check for the left stick. Default is <see cref="GamePadDeadZone.IndependentAxes"/>
+        /// </summary>
+        public GamePadDeadZone DeadZoneModeLeft { get; }
+
+        /// <summary>
+        ///     GamePadDeadZone mode to check for the right stick. Default is <see cref="GamePadDeadZone.IndependentAxes"/>
+        /// </summary>
+        public GamePadDeadZone DeadZoneModeRight { get;}
 
         /// <summary>
         ///     This event fires whenever a controller connects or disconnects.
