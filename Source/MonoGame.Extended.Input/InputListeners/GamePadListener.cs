@@ -10,7 +10,7 @@ namespace MonoGame.Extended.Input.InputListeners
     /// </summary>
     public class GamePadListener : InputListener
     {
-        private static readonly bool[] _gamePadConnections = new bool[4];
+        private static readonly bool[] GamePadConnections = new bool[4];
 
         // These buttons are not to be evaluated normally, but with the debounce filter
         // in their respective methods.
@@ -80,7 +80,7 @@ namespace MonoGame.Extended.Input.InputListeners
         ///     will fire when any controller changes in connectivity status.
         ///     <para>
         ///         This functionality requires that you have one actively updating
-        ///         <see cref="InputListenerManager" />.
+        ///         <see cref="InputListenerComponent" />.
         ///     </para>
         /// </summary>
         public static bool CheckControllerConnections { get; set; }
@@ -459,10 +459,10 @@ namespace MonoGame.Extended.Input.InputListeners
 
             foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
             {
-                if (GamePad.GetState(index).IsConnected ^ _gamePadConnections[(int) index])
+                if (GamePad.GetState(index).IsConnected ^ GamePadConnections[(int) index])
                     // We need more XORs in this world
                 {
-                    _gamePadConnections[(int) index] = !_gamePadConnections[(int) index];
+                    GamePadConnections[(int) index] = !GamePadConnections[(int) index];
                     ControllerConnectionChanged?.Invoke(null,
                         new GamePadEventArgs(GamePadState.Default, GamePad.GetState(index), TimeSpan.Zero, index));
                 }
