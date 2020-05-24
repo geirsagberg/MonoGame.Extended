@@ -123,14 +123,11 @@ namespace MonoGame.Extended.Input.InputListeners
         public float ThumbstickDownTreshold { get; private set; } = 0.5f;
 
         /// <summary>
-        ///     GamePadDeadZone mode to check for the left stick. Default is <see cref="GamePadDeadZone.IndependentAxes"/>
+        ///     GamePadDeadZone mode. Use IndependentAxes to "snap" to up/down/left/right,
+        ///     Circular to limit angular vector length to 1,
+        ///     or None to allow full movement from -1,-1 to 1,1. Default is <see cref="GamePadDeadZone.IndependentAxes"/>.
         /// </summary>
-        public GamePadDeadZone DeadZoneModeLeft { get; set; } = GamePadDeadZone.IndependentAxes;
-
-        /// <summary>
-        ///     GamePadDeadZone mode to check for the right stick. Default is <see cref="GamePadDeadZone.IndependentAxes"/>
-        /// </summary>
-        public GamePadDeadZone DeadZoneModeRight { get; set; } = GamePadDeadZone.IndependentAxes;
+        public GamePadDeadZone DeadZoneMode { get; set; } = GamePadDeadZone.IndependentAxes;
 
         public override GamePadListener CreateListener()
         {

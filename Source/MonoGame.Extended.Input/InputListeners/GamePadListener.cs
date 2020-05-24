@@ -69,8 +69,7 @@ namespace MonoGame.Extended.Input.InputListeners
             TriggerDownTreshold = settings.TriggerDownTreshold;
             RepeatInitialDelay = settings.RepeatInitialDelay;
             RepeatDelay = settings.RepeatDelay;
-            DeadZoneModeLeft = settings.DeadZoneModeLeft;
-            DeadZoneModeRight = settings.DeadZoneModeRight;
+            DeadZoneMode = settings.DeadZoneMode;
 
             _previousGameTime = new GameTime();
             _previousState = GamePadState.Default;
@@ -179,14 +178,11 @@ namespace MonoGame.Extended.Input.InputListeners
 
 
         /// <summary>
-        ///     GamePadDeadZone mode to check for the left stick. Default is <see cref="GamePadDeadZone.IndependentAxes"/>
+        ///     GamePadDeadZone mode. Use IndependentAxes to "snap" to up/down/left/right,
+        ///     Circular to limit angular vector length to 1,
+        ///     or None to allow full movement from -1,-1 to 1,1. Default is <see cref="GamePadDeadZone.IndependentAxes"/>.
         /// </summary>
-        public GamePadDeadZone DeadZoneModeLeft { get; }
-
-        /// <summary>
-        ///     GamePadDeadZone mode to check for the right stick. Default is <see cref="GamePadDeadZone.IndependentAxes"/>
-        /// </summary>
-        public GamePadDeadZone DeadZoneModeRight { get;}
+        public GamePadDeadZone DeadZoneMode { get; }
 
         /// <summary>
         ///     This event fires whenever a controller connects or disconnects.
@@ -484,7 +480,7 @@ namespace MonoGame.Extended.Input.InputListeners
         public override void Update(GameTime gameTime)
         {
             _gameTime = gameTime;
-            _currentState = GamePad.GetState(PlayerIndex);
+            _currentState = GamePad.GetState(PlayerIndex, DeadZoneMode);
             CheckVibrate();
             if (!_currentState.IsConnected)
                 return;
