@@ -52,7 +52,8 @@ namespace MonoGame.Extended.Entities
 
         public void Destroy(int entityId)
         {
-            _removedEntities.Add(entityId);
+            if (!_removedEntities.Contains(entityId))
+                _removedEntities.Add(entityId);
         }
 
         public void Destroy(Entity entity)
