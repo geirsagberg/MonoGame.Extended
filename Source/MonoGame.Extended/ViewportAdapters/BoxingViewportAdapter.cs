@@ -16,7 +16,6 @@ namespace MonoGame.Extended.ViewportAdapters
     public class BoxingViewportAdapter : ScalingViewportAdapter
     {
         private readonly GameWindow _window;
-        private readonly GraphicsDevice _graphicsDevice;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxingViewportAdapter" />.
@@ -25,7 +24,6 @@ namespace MonoGame.Extended.ViewportAdapters
             : base(graphicsDevice, virtualWidth, virtualHeight)
         {
             _window = window;
-            _graphicsDevice = graphicsDevice;
             window.ClientSizeChanged += OnClientSizeChanged;
             HorizontalBleed = horizontalBleed;
             VerticalBleed = verticalBleed;
@@ -72,7 +70,7 @@ namespace MonoGame.Extended.ViewportAdapters
             {
                 if (width >= clientBounds.Height && height <= clientBounds.Height)
                     BoxingMode = BoxingMode.Letterbox;
-               else
+                else
                     BoxingMode = BoxingMode.None;
             }
 
